@@ -1,0 +1,5 @@
+[
+  {"nombre": "el-propio-revisor", "url": "http://localhost:8080/salud", "timeout": "1s"},
+  {"nombre": "go.dev", "url": "https://go.dev", "timeout": "3s"},
+  {"nombre": "no-existe", "url": "http://servicio-que-no-existe.invalid", "timeout": "1s"}
+]

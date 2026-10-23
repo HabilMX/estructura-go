@@ -1,0 +1,11 @@
+# Lo que no sale al publicar: `git archive` respeta `export-ignore`.
+
+# La revisión de material no publicable se corre ANTES de publicar y se queda en
+# el repositorio de trabajo, igual que en los cursos: su lista deletrea nombres
+# internos, y el guion describe qué busca y qué exceptúa.
+.publicable-prohibido.txt export-ignore
+verificar-publicable.sh export-ignore
+
+# Los guiones no son el lenguaje que la plantilla enseña: que no cuenten para la
+# medida de lenguaje de GitHub.
+herramientas/*.sh linguist-detectable=false

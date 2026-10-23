@@ -1,0 +1,13 @@
+# El binario que deja «go build» sin -o cuando se corre en la raíz o en cmd/revisor.
+/revisor
+/cmd/revisor/revisor
+
+# Perfiles de cobertura y de rendimiento que uno genera al explorar.
+*.out
+*.prof
+*.test
+
+# Editores y sistema operativo.
+.idea/
+.vscode/
+.DS_Store

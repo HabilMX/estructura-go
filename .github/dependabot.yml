@@ -1,0 +1,13 @@
+# Una vez al mes, Dependabot propone actualizar las acciones del CI y, el día
+# que la plantilla tenga dependencias de Go, también ésas. Hoy go.mod no
+# requiere nada fuera de la biblioteca estándar.
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "gomod"
+    directory: "/"
+    schedule:
+      interval: "monthly"

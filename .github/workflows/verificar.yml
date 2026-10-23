@@ -1,0 +1,51 @@
+name: Verificar la plantilla
+
+# Se corre en cada cambio, a mano cuando se quiera, y una vez por semana: una
+# versión nueva de Go puede romper la plantilla sin que nadie haya tocado nada,
+# y es mejor enterarse por este rojo que por el primer lector que la clone.
+# ⚠️ En un repositorio público, GitHub apaga solo la corrida programada si el
+# repositorio pasa 60 días sin actividad; hay que volver a encenderla a mano.
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 13 * * 1" # lunes 13:17 UTC (7:17 en la Ciudad de México)
+
+permissions:
+  contents: read
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Formato (gofmt no debe proponer ningún cambio)
+        run: |
+          sin_formato="$(gofmt -l .)"
+          if [ -n "$sin_formato" ]; then
+            echo "Estos archivos no tienen el formato de gofmt:"
+            echo "$sin_formato"
+            exit 1
+          fi
+
+      - name: go vet
+        run: go vet ./...
+
+      - name: Pruebas con el detector de carreras
+        run: go test -race -count=1 ./...
+
+      - name: Compilar los programas de cmd/
+        run: go build ./cmd/...
+
+      # La frontera que sabe fallar: un módulo ajeno intenta importar
+      # internal/servicio y la herramienta go TIENE que rechazarlo. Si alguna vez
+      # compila, este paso se pone rojo. Se llama con bash para no depender de
+      # que el archivo conserve su permiso de ejecución.
+      - name: Frontera de internal/ (tiene que fallar el import prohibido)
+        run: bash herramientas/probar-frontera.sh
